@@ -36,8 +36,15 @@ namespace ParticleSystem
          * beta=variance.
          * For uniformly-distributed params, alpha=min and
          * beta=max.
+         * For exponentially-distributed params, alpha=mean.
+         * beta is unused.
+         * For fixed params, only alpha is used.
          **/
-        Vector3D positionAlpha;
+
+        /**
+         * Position is relative to emitter's centre.
+         **/
+        Vector3D positionAlpha; 
         Vector3D positionBeta;
         Distribution positionDist;
 
@@ -77,13 +84,14 @@ namespace ParticleSystem
         double ttlBeta;
         Distribution ttlDist;
 
+      
 
         /**
          * Particle Emitter behaviour parameters. These properties 
          * belong to the emitter itself, not to the particles.
          **/
         public Vector3D Location { get; set; } // Center point of emitter.
-        public Vector3D EmitDimensions { get; set; } // Area from which particles can be emitted.
+        public Vector3D EmitDimensions { get; set; } // Area from which particles can be emitted. currently unused.
         
         
         public int MaxNumParticles { get; set; } // Max number of particles allowed in queue.
@@ -96,6 +104,8 @@ namespace ParticleSystem
 
         public bool EmitActivity { get; set; } // Whether emitter should currently emitting particles.
         public bool PermanentParticles { get; set; } // Are particles permanent or do they disappear?
+
+        public int NumTextures { get; set; } // Used for multi-texture emitters.
 
 
 
@@ -200,6 +210,8 @@ namespace ParticleSystem
             this.EmitLifetime = emitLife;
             this.PermanentParticles = permParts;
 
+            NumTextures = 0;
+
             
         }
 
@@ -209,10 +221,33 @@ namespace ParticleSystem
          **/
         private Particle GenerateParticle()
         {
+            Vector3D generateLocation;
+
+            if (positionDist == Distribution.Normal)
+            {
+                
+                generateLocation = grandom.GetNormalVector3D(
+                    new Vector3D(Location.X + positionAlpha.X, 
+                        Location.Y + positionAlpha.Y,
+                        Location.Z + positionAlpha.Z),
+                         
+                    positionBeta);
+            }
+            else
+            {
+                generateLocation = grandom.GetUniformVector3D(
+                    new Vector3D(Location.X - positionAlpha.X,
+                        Location.Y - positionAlpha.Y,
+                        Location.Z - positionAlpha.Z),
+                    new Vector3D(Location.X + positionBeta.X,
+                        Location.Y + positionBeta.Y,
+                        Location.Z + positionBeta.Z));      
+            }
+
 
             
             return new Particle(this,
-                grandom.GetRandomVector3D(positionDist, positionAlpha, positionBeta),
+                generateLocation,
                 grandom.GetRandomVector3D(velocityDist, velocityAlpha, velocityBeta),
                 grandom.GetRandomVector3D(accelerationDist, accelerationAlpha, accelerationBeta),
                 grandom.GetRandomDouble(angleDist, angleAlpha, angleBeta), 
@@ -221,7 +256,8 @@ namespace ParticleSystem
                 grandom.GetRandomDouble(transparencyDist, tranparencyAlpha, transparencyBeta),
                 grandom.GetRandomDouble(sizeDist, sizeAlpha, sizeBeta),
                 grandom.GetRandomDouble(sizeGrowthDist,sizeGrowthAlpha, sizeGrowthBeta),
-                (int)grandom.GetRandomDouble(ttlDist, ttlAlpha, ttlBeta));
+                (int)grandom.GetRandomDouble(ttlDist, ttlAlpha, ttlBeta),
+                grandom.GetUniformInt(0, NumTextures));
 
         }
 

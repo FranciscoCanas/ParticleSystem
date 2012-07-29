@@ -72,6 +72,12 @@ namespace ParticleSystem
          **/
         public int TTL { get; set; }
 
+        /**
+         * Index of sprite/Texture used by this particle.
+         * Used for emitters with multiple textures.
+         **/
+        public int TextureIndex { get; set; }
+
 
        
 
@@ -87,7 +93,8 @@ namespace ParticleSystem
             double alpha,
             double size,
             double sizeDelta,
-            int ttl
+            int ttl,
+            int txtIndex
             )
         {
             this.parentEmitter = parent;
@@ -101,6 +108,7 @@ namespace ParticleSystem
             this.size = size;
             this.sizeDelta = sizeDelta;
             this.TTL = ttl;
+            this.TextureIndex = txtIndex;
         }
 
 
@@ -124,15 +132,7 @@ namespace ParticleSystem
             angle += angularVelocity;
             size *= sizeDelta;
 
-        }
-
-        /**
-         * The Draw() function must be implemented according to whatever specs
-         * the graphics engine requires.
-         **/
-        //abstract public void Draw();
-
-    
+        }    
         
     }
 }

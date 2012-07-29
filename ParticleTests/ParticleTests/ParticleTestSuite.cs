@@ -24,8 +24,10 @@ namespace ParticleTests
         Game parent;
         XNAEmitter pe1;
         XNAEmitter pe2;
-        Texture2D p1Texture, p2Texture;
+        Texture2D p1Texture, p2Texture, p2Texture2, p2Texture3;
         SpriteEffects p1Effects, p2Effects;
+        Vector3D TestLocation = new Vector3D(350, 350,0);
+        
 
         public ParticleTestSuite(Game game)
             : base(game)
@@ -35,54 +37,56 @@ namespace ParticleTests
             p2Effects = SpriteEffects.None;
             p1Texture = game.Content.Load<Texture2D>(@"smoke2");
             p2Texture = game.Content.Load<Texture2D>(@"fire");
+            p2Texture2 = game.Content.Load<Texture2D>(@"electric");
+            p2Texture3 = game.Content.Load<Texture2D>(@"smoke2");
 
             // TODO: Construct any child components here
             pe1 = new XNAEmitter(
-                p1Texture, 
-                p1Effects,
-                new Vector3D(250, 250, 0), // Pos
-                 new Vector3D(50, 50, 0),
+             
+                new Vector3D(0, -25, 0), // Pos
+                 new Vector3D(500, 10, 0),
                  Distribution.Normal,
-                  new Vector3D(-3, -5, 0), // Vel
-                   new Vector3D(3, -1, 0),
+                  new Vector3D(-0.25, -0.25, 0), // Vel
+                   new Vector3D(0, -0.005, 0),
                    Distribution.Uniform,
-                    new Vector3D(0, 0, 0), // Acc
-                    new Vector3D(0, 0, 0),
-                    Distribution.Fixed,
+                    new Vector3D(0.00, -0.01, 0), // Acc
+                    new Vector3D(0.01, -0.001, 0),
+                    Distribution.Uniform,
                     0.0, // angleAlpha
-                    0.0, // angleBeta
+                    1.0, // angleBeta
                     Distribution.Uniform,
                     0.0005, //AngVelMean
-                    0.005, // AngVelVar
+                    0.015, // AngVelVar
                     Distribution.Uniform,
                     new Vector3D(255, 255, 255), // ColorMean
                     new Vector3D(255, 255, 255), // ColorVar
                     Distribution.Fixed,
                     255.0, 255.0, // alphamin and max
                     Distribution.Uniform,
-                    0.5, 0.005, // SizeMean, SizeVar
+                    0.35, 0.005, // SizeMean, SizeVar
                     Distribution.Normal,
-                    1.0, 0.000, //SizeDeltaMean and Var
-                    Distribution.Fixed,
-                    3000, // TTLMean
+                    1.0, 1.001, //SizeDeltaMean and Var
+                    Distribution.Uniform,
+                    8000, // TTLMean
                     1000, // TTLvar
                     Distribution.Normal,
-                    new Vector3D(200,200,0), // Emitter Loc
+                    TestLocation, // Emitter Loc
                     new Vector3D(25, 25, 0), // Emitter Dim
                     5000, // MaxNumParticles
                     5, // EmitRate
-                    50, // EmitDelay
+                    55, // EmitDelay
                     15000, // Emitter Life
                     false);
 
+            pe1.LoadTexture(p1Texture);
+
             pe2 = new XNAEmitter(
-                p2Texture,
-                p2Effects,
-                new Vector3D(250, 250, 0), // Pos
-                 new Vector3D(50, 50, 0),
+             
+                new Vector3D(0, 0, 0), // Pos
+                 new Vector3D(500, 150, 0),
                  Distribution.Normal,
-                  new Vector3D(-1, -1, 0), // Vel
-                   new Vector3D(1, -1, 0),
+                  new Vector3D(0, -0.5, 0), // Vel
+                   new Vector3D(0.5, -0.25, 0),
                    Distribution.Uniform,
                     new Vector3D(0, 0, 0), // Acc
                     new Vector3D(0, 0, 0),
@@ -98,20 +102,23 @@ namespace ParticleTests
                     Distribution.Fixed,
                     255.0, 255.0, // alphamean and var
                     Distribution.Fixed,
-                    0.1, 0.005, // SizeMean, SizeVar
+                    0.1, 0.0005, // SizeMean, SizeVar
                     Distribution.Normal,
                     1.0, 0.000, //SizeDeltaMean and Var
                     Distribution.Fixed,
-                    1000, // TTLMean
+                    800, // TTLMean
                     100, // TTLvar
                     Distribution.Normal,
-                    new Vector3D(200, 200, 0), // Emitter Loc
+                    TestLocation, // Emitter Loc
                     new Vector3D(25, 25, 0), // Emitter Dim
-                    5000, // MaxNumParticles
+                    500, // MaxNumParticles
                     5, // EmitRate
-                    50, // EmitDelay
+                    10, // EmitDelay
                     15000, // Emitter Life
-                    false);      
+                    false);
+            pe2.LoadTexture(p2Texture);
+            pe2.LoadTexture(p2Texture2);
+            
         }
 
         /// <summary>
@@ -142,8 +149,11 @@ namespace ParticleTests
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            pe2.Draw(spriteBatch);
+
+            
             pe1.Draw(spriteBatch);
+            pe2.Draw(spriteBatch);
+            
             
         }
     }

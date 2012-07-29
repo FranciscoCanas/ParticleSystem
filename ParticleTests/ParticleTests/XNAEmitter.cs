@@ -12,15 +12,16 @@ namespace ParticleTests
     class XNAEmitter : ParticleEmitter
     {
         SpriteEffects spriteEffects;
+        private List<Texture2D> TextureList = new List<Texture2D>();
         Texture2D particleTexture;
+        private bool USES_MULTIPLE_TEXTURES = false;
 
         public XNAEmitter()
         {
-
+            
         }
 
-        public XNAEmitter(Texture2D tex,
-            SpriteEffects spFX,
+        public XNAEmitter(
             Vector3D positionMean, Vector3D positionVar, Distribution pDist,
             Vector3D velocityMean, Vector3D velocityVar, Distribution vDist,
             Vector3D accelerationMean, Vector3D accelerationVar, Distribution aDist,
@@ -56,21 +57,41 @@ namespace ParticleTests
              emitLife,
              permParts)
         {
-            particleTexture = tex;
-            spriteEffects = spFX;
-
+             
         }
+
+        /**
+         * Adds textures to the list of particle
+         * textures.
+         **/
+        public void LoadTexture(Texture2D texture)
+        {
+            TextureList.Add(texture);
+            NumTextures++;
+            if (TextureList.Count > 1)
+            {
+                USES_MULTIPLE_TEXTURES = true;
+            }
+            else
+            {
+                particleTexture = texture;
+            }
+        }
+
         public void Draw(SpriteBatch spriteBatch)
         {
             //spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.Additive);
-            
+            Texture2D DrawTexture = particleTexture;
 
             foreach (Particle p in particles)
             {
                 if ((p.TTL > 0) || PermanentParticles)
                 {
-
-                    spriteBatch.Draw(particleTexture, 
+                    if (USES_MULTIPLE_TEXTURES)
+                    {
+                        DrawTexture = TextureList[p.TextureIndex];
+                    }
+                    spriteBatch.Draw(DrawTexture, 
                         new Vector2((float)p.position.X, (float)p.position.Y), 
                         new Rectangle(0,0, particleTexture.Width, particleTexture.Height), 
                         new Color((float)p.color.X, (float)p.color.Y, (float)p.color.Z, (float)p.alpha), 
