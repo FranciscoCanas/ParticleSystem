@@ -5,22 +5,40 @@ using System.Text;
 using ParticleSystem;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System.Xml;
 using GRNG;
 
 namespace ParticleTests
 {
     class XNAEmitter : ParticleEmitter
     {
-        SpriteEffects spriteEffects;
+        Game parent;
+        SpriteEffects spriteEffects = SpriteEffects.None;
+        BlendState blendState = BlendState.AlphaBlend;
+        SpriteSortMode spriteSortMode = SpriteSortMode.Deferred;
+
         private List<Texture2D> TextureList = new List<Texture2D>();
         Texture2D particleTexture;
         private bool USES_MULTIPLE_TEXTURES = false;
 
-        public XNAEmitter()
+        /**
+         * XML-based contructor. Initializes emitter
+         * with parameters from xmlFileName.
+         **/
+        public XNAEmitter(Game p, String xmlFileName) : base()
         {
-            
+            XmlDocument doc = new XmlDocument();
+
+            parent = p;
+            doc.Load(xmlFileName);
+            LoadXMLEmitter(doc);
+            LoadXNAXMLParameters(doc);
         }
 
+        /**
+         * Explicit contructor initializes emitter with 
+         * specified parameters.
+         **/
         public XNAEmitter(
             Vector3D positionMean, Vector3D positionVar, Distribution pDist,
             Vector3D velocityMean, Vector3D velocityVar, Distribution vDist,
@@ -60,6 +78,34 @@ namespace ParticleTests
              
         }
 
+        public void LoadXNAXMLParameters(XmlDocument doc)
+        {
+            XmlNode XNAPars =
+                doc.SelectSingleNode("/ParticleSystem/XNAParameters");
+
+            
+            
+            spriteEffects = (SpriteEffects)Enum.Parse(typeof(SpriteEffects),
+                Convert.ToString(XNAPars.SelectSingleNode("spriteEffects").
+                Attributes.GetNamedItem("x").Value));
+            /**
+            blendState = (BlendState)Enum.Parse(typeof(BlendState),
+                Convert.ToString(XNAPars.SelectSingleNode("blendState").
+                Attributes.GetNamedItem("x").Value));**/
+
+            spriteSortMode = (SpriteSortMode)Enum.Parse(typeof(SpriteSortMode),
+                Convert.ToString(XNAPars.SelectSingleNode("spriteSortMode").
+                Attributes.GetNamedItem("x").Value));
+
+            foreach (XmlNode texture in XNAPars.SelectSingleNode("textureList"))
+            {
+                Texture2D n = parent.Content.Load<Texture2D>(
+                    Convert.ToString(texture.Attributes.GetNamedItem("x").Value));
+                
+                LoadTexture(n);
+            }
+        }
+
         /**
          * Adds textures to the list of particle
          * textures.
@@ -78,11 +124,17 @@ namespace ParticleTests
             }
         }
 
+       
+
+        /**
+         * XNA-specific Draw method.
+         **/
         public void Draw(SpriteBatch spriteBatch)
         {
-            //spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.Additive);
+            
             Texture2D DrawTexture = particleTexture;
 
+            spriteBatch.Begin(spriteSortMode, blendState);
             foreach (Particle p in particles)
             {
                 if ((p.TTL > 0) || PermanentParticles)
@@ -94,16 +146,17 @@ namespace ParticleTests
                     spriteBatch.Draw(DrawTexture, 
                         new Vector2((float)p.position.X, (float)p.position.Y), 
                         new Rectangle(0,0, particleTexture.Width, particleTexture.Height), 
-                        new Color((float)p.color.X, (float)p.color.Y, (float)p.color.Z, (float)p.alpha), 
+                        new Color((float)p.color.X, (float)p.color.Y, (float)p.color.Z, (float)p.transparency), 
                         (float)p.angle,
                         new Vector2(particleTexture.Width / 2, particleTexture.Height / 2), 
                         (float)p.size, 
-                        SpriteEffects.None, 0f); 
-                    
-            
+                        spriteEffects, 0f); 
+
                 }
             }
-            //spriteBatch.End();
+
+            spriteBatch.End();
+            
         }
     }
 }

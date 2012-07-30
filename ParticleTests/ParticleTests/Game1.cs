@@ -89,14 +89,15 @@ namespace ParticleTests
             GraphicsDevice.Clear(Color.White);
 
             // TODO: Add your drawing code here
+            spriteBatch.Begin();
             
             
-            spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
             
             
-            suite1.Draw(spriteBatch);
+            
             
             spriteBatch.End();
+            suite1.Draw(spriteBatch);
             base.Draw(gameTime);
         }
     }

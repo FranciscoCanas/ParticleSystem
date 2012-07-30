@@ -22,102 +22,27 @@ namespace ParticleTests
     public class ParticleTestSuite : Microsoft.Xna.Framework.GameComponent
     {
         Game parent;
-        XNAEmitter pe1;
-        XNAEmitter pe2;
-        Texture2D p1Texture, p2Texture, p2Texture2, p2Texture3;
-        SpriteEffects p1Effects, p2Effects;
-        Vector3D TestLocation = new Vector3D(350, 350,0);
+        KeyboardState current = new KeyboardState();
+        KeyboardState previous = new KeyboardState();
+           
+        
+        XNAEmitter pe1; // Smoke
+        XNAEmitter pe2; // Fire
+        
+        XNAEmitter pe3;
+        XNAEmitter pe4;
+        
         
 
         public ParticleTestSuite(Game game)
             : base(game)
         {
             parent = game;
-            p1Effects = SpriteEffects.None;
-            p2Effects = SpriteEffects.None;
-            p1Texture = game.Content.Load<Texture2D>(@"smoke2");
-            p2Texture = game.Content.Load<Texture2D>(@"fire");
-            p2Texture2 = game.Content.Load<Texture2D>(@"electric");
-            p2Texture3 = game.Content.Load<Texture2D>(@"smoke2");
-
             // TODO: Construct any child components here
-            pe1 = new XNAEmitter(
-             
-                new Vector3D(0, -25, 0), // Pos
-                 new Vector3D(500, 10, 0),
-                 Distribution.Normal,
-                  new Vector3D(-0.25, -0.25, 0), // Vel
-                   new Vector3D(0, -0.005, 0),
-                   Distribution.Uniform,
-                    new Vector3D(0.00, -0.01, 0), // Acc
-                    new Vector3D(0.01, -0.001, 0),
-                    Distribution.Uniform,
-                    0.0, // angleAlpha
-                    1.0, // angleBeta
-                    Distribution.Uniform,
-                    0.0005, //AngVelMean
-                    0.015, // AngVelVar
-                    Distribution.Uniform,
-                    new Vector3D(255, 255, 255), // ColorMean
-                    new Vector3D(255, 255, 255), // ColorVar
-                    Distribution.Fixed,
-                    255.0, 255.0, // alphamin and max
-                    Distribution.Uniform,
-                    0.35, 0.005, // SizeMean, SizeVar
-                    Distribution.Normal,
-                    1.0, 1.001, //SizeDeltaMean and Var
-                    Distribution.Uniform,
-                    8000, // TTLMean
-                    1000, // TTLvar
-                    Distribution.Normal,
-                    TestLocation, // Emitter Loc
-                    new Vector3D(25, 25, 0), // Emitter Dim
-                    5000, // MaxNumParticles
-                    5, // EmitRate
-                    55, // EmitDelay
-                    15000, // Emitter Life
-                    false);
-
-            pe1.LoadTexture(p1Texture);
-
-            pe2 = new XNAEmitter(
-             
-                new Vector3D(0, 0, 0), // Pos
-                 new Vector3D(500, 150, 0),
-                 Distribution.Normal,
-                  new Vector3D(0, -0.5, 0), // Vel
-                   new Vector3D(0.5, -0.25, 0),
-                   Distribution.Uniform,
-                    new Vector3D(0, 0, 0), // Acc
-                    new Vector3D(0, 0, 0),
-                    Distribution.Fixed,
-                    0.0, // angleAlpha
-                    0.0, // angleBeta
-                    Distribution.Uniform,
-                    0.0005, //AngVelMean
-                    0.005, // AngVelVar
-                    Distribution.Uniform,
-                    new Vector3D(255, 255, 255), // ColorMean
-                    new Vector3D(255, 255, 255), // ColorVar
-                    Distribution.Fixed,
-                    255.0, 255.0, // alphamean and var
-                    Distribution.Fixed,
-                    0.1, 0.0005, // SizeMean, SizeVar
-                    Distribution.Normal,
-                    1.0, 0.000, //SizeDeltaMean and Var
-                    Distribution.Fixed,
-                    800, // TTLMean
-                    100, // TTLvar
-                    Distribution.Normal,
-                    TestLocation, // Emitter Loc
-                    new Vector3D(25, 25, 0), // Emitter Dim
-                    500, // MaxNumParticles
-                    5, // EmitRate
-                    10, // EmitDelay
-                    15000, // Emitter Life
-                    false);
-            pe2.LoadTexture(p2Texture);
-            pe2.LoadTexture(p2Texture2);
+            pe1 = new XNAEmitter(parent, "D:\\workspace\\ParticleSystem\\ParticleTests\\ParticleTestsContent\\particleEmitter1.xml");
+            pe2 = new XNAEmitter(parent, "D:\\workspace\\ParticleSystem\\ParticleTests\\ParticleTestsContent\\particleEmitter2.xml");
+            pe3 = new XNAEmitter(parent, "D:\\workspace\\ParticleSystem\\ParticleTests\\ParticleTestsContent\\particleEmitter3.xml");
+            pe4 = new XNAEmitter(parent, "D:\\workspace\\ParticleSystem\\ParticleTests\\ParticleTestsContent\\particleEmitter4.xml");        
             
         }
 
@@ -128,9 +53,37 @@ namespace ParticleTests
         public override void Initialize()
         {
             // TODO: Add your initialization code here
-            pe1.Start();
-            pe2.Start();
             base.Initialize();
+        }
+
+        public void ToggleEffect(int num) {
+            switch (num)
+            {
+                case 1:
+                    if (pe2.EmitActivity)
+                    {
+                        pe1.Stop();
+                        pe2.Stop();
+                    }
+                    else
+                    {
+                        pe1.Start();
+                        pe2.Start();
+                    }
+                    break;
+                case 2:
+                    if (pe4.EmitActivity)
+                    {
+                        pe3.Stop();
+                        pe4.Stop();
+                    }
+                    else
+                    {
+                        pe3.Start();
+                        pe4.Start();
+                    }
+                    break;
+            }
         }
 
         /// <summary>
@@ -140,21 +93,39 @@ namespace ParticleTests
         public override void Update(GameTime gameTime)
         {
             // TODO: Add your update code here
+            current = Keyboard.GetState();
+
+            if (current.IsKeyDown(Keys.Escape) && !previous.IsKeyDown(Keys.Escape))
+            {
+                parent.Exit();
+            }
+            if (current.IsKeyDown(Keys.D1) && !previous.IsKeyDown(Keys.D1))
+            {
+                ToggleEffect(1);
+            }
+            if (current.IsKeyDown(Keys.D2) && !previous.IsKeyDown(Keys.D2))
+            {
+                ToggleEffect(2);
+            }
+
+            previous = current;
             
             base.Update(gameTime);
-            pe1.Update(gameTime.ElapsedGameTime.Milliseconds);
-            pe2.Update(gameTime.ElapsedGameTime.Milliseconds);
+            if (pe1 != null ) pe1.Update(gameTime.ElapsedGameTime.Milliseconds);
+            if (pe2 != null ) pe2.Update(gameTime.ElapsedGameTime.Milliseconds);
+            if (pe3 != null) pe3.Update(gameTime.ElapsedGameTime.Milliseconds);
+            if (pe4 != null) pe4.Update(gameTime.ElapsedGameTime.Milliseconds);
             
         }
 
         public void Draw(SpriteBatch spriteBatch)
         {
 
-            
-            pe1.Draw(spriteBatch);
             pe2.Draw(spriteBatch);
-            
-            
+            pe4.Draw(spriteBatch);
+            pe1.Draw(spriteBatch);
+            pe3.Draw(spriteBatch);
+                       
         }
     }
 }

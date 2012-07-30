@@ -54,7 +54,7 @@ namespace ParticleSystem
          **/
         public Vector3D color { get; set; }
 
-        public double alpha { get; set; }
+        public double transparency { get; set; }
 
         /**
          * Scale at which to draw particle.
@@ -104,7 +104,7 @@ namespace ParticleSystem
             this.angle = angle;
             this.angularVelocity = angVel;
             this.color = col;
-            this.alpha = alpha;
+            this.transparency = alpha;
             this.size = size;
             this.sizeDelta = sizeDelta;
             this.TTL = ttl;

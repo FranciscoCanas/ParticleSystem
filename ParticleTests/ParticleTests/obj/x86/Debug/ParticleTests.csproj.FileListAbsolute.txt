@@ -13,3 +13,6 @@ D:\workspace\ParticleSystem\ParticleTests\ParticleTests\bin\x86\Debug\Content\sm
 D:\workspace\ParticleSystem\ParticleTests\ParticleTests\bin\x86\Debug\Content\particle_base.xnb
 D:\workspace\ParticleSystem\ParticleTests\ParticleTests\bin\x86\Debug\GRNG.exe
 D:\workspace\ParticleSystem\ParticleTests\ParticleTests\bin\x86\Debug\GRNG.pdb
+D:\workspace\ParticleSystem\ParticleTests\ParticleTests\bin\x86\Debug\Content\particleEmitter2.xml
+D:\workspace\ParticleSystem\ParticleTests\ParticleTests\bin\x86\Debug\Content\particleEmitter3.xml
+D:\workspace\ParticleSystem\ParticleTests\ParticleTests\bin\x86\Debug\Content\particleEmitter4.xml

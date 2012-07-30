@@ -1,0 +1,60 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ParticleSystem>
+  <!-- XNA-specific parameters go here.-->
+  <XNAParameters>
+    <spriteEffects x="None"></spriteEffects>
+    <blendState x="AlphaBlend"></blendState>
+    <spriteSortMode x="Deferred"></spriteSortMode>
+    <textureList>
+      <texture x="fire"></texture>
+      <texture x="electric"></texture>
+      <texture x="smoke2"></texture>
+    </textureList>
+  </XNAParameters>
+  <!-- Explicit parameters for emitter go here: -->
+  <EmitterParameters>
+    <location x="450" y="350" z="0"></location>
+    <dimension x="50" y="50" z="0"></dimension>
+    <maxNumParticles x="500"></maxNumParticles>
+    <emitRate x="50"></emitRate>
+    <meanEmitDelay x="5"></meanEmitDelay>
+    <emitterLifetime x="500"></emitterLifetime>
+    <permanentParticles x="false"></permanentParticles>
+  </EmitterParameters>
+  <!-- Random parameters for particle generation go here:-->
+  <ParticleParameters>
+    <position>
+      <alpha x="0" y="0" z="0"></alpha>
+      <beta x="500" y="500" z="0"></beta>
+      <distribution x="Normal"></distribution>
+    </position>
+
+    <velocity>
+      <alpha x="-5" y="-5" z="0"></alpha>
+      <beta x="5" y="5" z="0"></beta>
+      <distribution x="Uniform"></distribution>
+    </velocity>
+
+    <acceleration>
+      <alpha x="0.0" y="0.0" z="0"></alpha>
+      <beta x="0.0" y="0.0" z="0"></beta>
+      <distribution x="Fixed"></distribution>
+    </acceleration>
+
+
+    <color>
+      <alpha x="255" y="255" z="255"></alpha>
+      <beta x="255" y="255" z="255"></beta>
+      <distribution x="Fixed"></distribution>
+    </color>
+
+    <angle alpha="0" beta="1.0" distribution="Uniform"></angle>
+    <angularVelocity alpha="0.005" beta="0.005" distribution="Uniform"></angularVelocity>
+    <transparency alpha="255.0" beta="255.0" distribution="Uniform"></transparency>
+    <size alpha="0.25" beta="0.005" distribution="Normal"></size>
+    <growth alpha="1.0" beta="1.01" distribution="Uniform"></growth>
+    <ttl alpha="1600" beta="100" distribution="Normal"></ttl>
+  </ParticleParameters>
+
+</ParticleSystem>
+

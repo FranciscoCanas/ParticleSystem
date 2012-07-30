@@ -116,7 +116,6 @@
     <Compile Include="Program.cs" />
     <Compile Include="Game1.cs" />
     <Compile Include="XNAEmitter.cs" />
-    <Compile Include="XNAParticle.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Game.ico" />

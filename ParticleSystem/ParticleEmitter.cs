@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Xml;
 using GRNG;
 
 
@@ -32,57 +33,77 @@ namespace ParticleSystem
          * the corresponding property of a particle when it
          * is instantiated by the emitter.
          * 
-         * For normally-distributed params, alpha=mean and
+         * For normally-distributed params, transparency=mean and
          * beta=variance.
-         * For uniformly-distributed params, alpha=min and
+         * For uniformly-distributed params, transparency=min and
          * beta=max.
-         * For exponentially-distributed params, alpha=mean.
+         * For exponentially-distributed params, transparency=mean.
          * beta is unused.
-         * For fixed params, only alpha is used.
+         * For fixed params, only transparency is used.
          **/
 
         /**
          * Position is relative to emitter's centre.
          **/
-        Vector3D positionAlpha; 
-        Vector3D positionBeta;
-        Distribution positionDist;
+        //protected Vector3D positionAlpha; 
+        //protected Vector3D positionBeta;
+        //protected Distribution positionDist;
 
-        Vector3D velocityAlpha;
-        Vector3D velocityBeta;
-        Distribution velocityDist;
+        protected Parameter3D position = new Parameter3D();
 
-        Vector3D accelerationAlpha;
-        Vector3D accelerationBeta;
-        Distribution accelerationDist;
+        //protected Vector3D velocityAlpha;
+        //protected Vector3D velocityBeta;
+        //protected Distribution velocityDist;
 
-        double angleAlpha; 
-        double angleBeta;
-        Distribution angleDist;
+        protected Parameter3D velocity = new Parameter3D();
 
-        double angVelocityAlpha;
-        double angVelocityBeta;
-        Distribution angVelocityDist;
+        //protected Vector3D accelerationAlpha;
+        //protected Vector3D accelerationBeta;
+        //protected Distribution accelerationDist;
 
-        Vector3D colorAlpha;
-        Vector3D colorBeta;
-        Distribution colorDist;
+        protected Parameter3D acceleration = new Parameter3D();
 
-        double tranparencyAlpha;
-        double transparencyBeta;
-        Distribution transparencyDist;
+        //protected double angleAlpha; 
+        //protected double angleBeta;
+        //protected Distribution angleDist;
 
-        double sizeAlpha;
-        double sizeBeta;
-        Distribution sizeDist;
+        protected ParameterDouble angle = new ParameterDouble();
 
-        double sizeGrowthAlpha;
-        double sizeGrowthBeta;
-        Distribution sizeGrowthDist;
+        //protected double angVelocityAlpha;
+        //protected double angVelocityBeta;
+        //protected Distribution angVelocityDist;
 
-        double ttlAlpha;
-        double ttlBeta;
-        Distribution ttlDist;
+        protected ParameterDouble angularVelocity = new ParameterDouble();
+
+        //Vector3D colorAlpha;
+        //Vector3D colorBeta;
+        //Distribution colorDist;
+
+        protected Parameter3D color = new Parameter3D();
+
+        //double tranparencyAlpha;
+        //double transparencyBeta;
+        //Distribution transparencyDist;
+
+        protected ParameterDouble transparency = new ParameterDouble();
+
+        //double sizeAlpha;
+        //double sizeBeta;
+        //Distribution sizeDist;
+
+        protected ParameterDouble size = new ParameterDouble();
+
+        //double sizeGrowthAlpha;
+        //double sizeGrowthBeta;
+        //Distribution sizeGrowthDist;
+
+        protected ParameterDouble growth = new ParameterDouble();
+
+        //double ttlAlpha;
+        //double ttlBeta;
+        //Distribution ttlDist;
+
+        protected ParameterDouble ttl = new ParameterDouble();
 
       
 
@@ -96,10 +117,10 @@ namespace ParticleSystem
         
         public int MaxNumParticles { get; set; } // Max number of particles allowed in queue.
         public int EmitRate { get; set; } // How many particles we can generate each update.
-        public int EmitDelay { get; set; } // How much time between individual new particle emits, in MS.
+        public int MeanEmitDelay { get; set; } // Mean time between individual new particle emits, in MS.
         public int EmitLifetime { get; set; } // How long emitter emits for, in MS.
         public int CurrentLifeTime { get; set; } // Running total of time spent emitting, in MS.
-        public int TimeSinceLastEmit { get; set; } // How long ago we last emitted, in MS.
+        public int TimeToNextEmit { get; set; } // How long ago we last emitted, in MS.
 
 
         public bool EmitActivity { get; set; } // Whether emitter should currently emitting particles.
@@ -112,10 +133,7 @@ namespace ParticleSystem
 
 
 
-        /**
-         * Current position of the emitter on screen.
-         **/
-        public Vector3D position { get; set; }
+        
         
 
         /**
@@ -161,52 +179,52 @@ namespace ParticleSystem
             bool permParts
             ) : this() 
         {
-            this.positionAlpha = positionMean;
-            this.positionBeta = positionVar;
-            this.positionDist = pDist;
+            this.position.alpha = positionMean;
+            this.position.beta = positionVar;
+            this.position.distribution = pDist;
 
-            this.velocityAlpha = velocityMean;
-            this.velocityBeta = velocityVar;
-            this.velocityDist = vDist;
+            this.velocity.alpha = velocityMean;
+            this.velocity.beta = velocityVar;
+            this.velocity.distribution = vDist;
 
-            this.accelerationAlpha = accelerationMean;
-            this.accelerationBeta = accelerationVar;
-            this.accelerationDist = aDist;
+            this.acceleration.alpha = accelerationMean;
+            this.acceleration.beta = accelerationVar;
+            this.acceleration.distribution = aDist;
 
-            this.angleAlpha = angleMean;
-            this.angleBeta = angleVar;
-            this.angleDist = angleDist;
+            this.angle.alpha = angleMean;
+            this.angle.beta = angleVar;
+            this.angle.distribution = angleDist;
 
-            this.angVelocityAlpha = angVelocityMean;
-            this.angVelocityBeta = angVelocityVar;
-            this.angVelocityDist = angVelDist;
+            this.angularVelocity.alpha = angVelocityMean;
+            this.angularVelocity.beta = angVelocityVar;
+            this.angularVelocity.distribution = angVelDist;
 
-            this.colorAlpha = colorMean;
-            this.colorBeta = colorVar;
-            this.colorDist = colDist;
+            this.color.alpha = colorMean;
+            this.color.beta = colorVar;
+            this.color.distribution = colDist;
 
-            this.tranparencyAlpha = alphaMean;
-            this.transparencyBeta = alphaVar;
-            this.transparencyDist = tranDist;
+            this.transparency.alpha = alphaMean;
+            this.transparency.beta = alphaVar;
+            this.transparency.distribution = tranDist;
 
-            this.sizeAlpha = sizeMean;
-            this.sizeBeta = sizeVar;
-            this.sizeDist = sizeDist;
+            this.size.alpha = sizeMean;
+            this.size.beta = sizeVar;
+            this.size.distribution = sizeDist;
 
-            this.sizeGrowthAlpha = sizeDeltaMean;
-            this.sizeGrowthBeta = sizeDeltaVar;
-            this.sizeGrowthDist = sizeDeltaDist;
+            this.growth.alpha = sizeDeltaMean;
+            this.growth.beta = sizeDeltaVar;
+            this.growth.distribution = sizeDeltaDist;
 
-            this.ttlAlpha = ttlMean;
-            this.ttlBeta = ttlVar;
-            this.ttlDist = ttlDist;
+            this.ttl.alpha = ttlMean;
+            this.ttl.beta = ttlVar;
+            this.ttl.distribution = ttlDist;
 
 
             this.Location = location;
             this.EmitDimensions = dimension;
             this.MaxNumParticles = maxNumPart;
             this.EmitRate = emitRate;
-            this.EmitDelay = emitDelay;
+            this.MeanEmitDelay = emitDelay;
             this.EmitLifetime = emitLife;
             this.PermanentParticles = permParts;
 
@@ -223,40 +241,40 @@ namespace ParticleSystem
         {
             Vector3D generateLocation;
 
-            if (positionDist == Distribution.Normal)
+            if (position.distribution == Distribution.Normal)
             {
                 
                 generateLocation = grandom.GetNormalVector3D(
-                    new Vector3D(Location.X + positionAlpha.X, 
-                        Location.Y + positionAlpha.Y,
-                        Location.Z + positionAlpha.Z),
+                    new Vector3D(Location.X + position.alpha.X, 
+                        Location.Y + position.alpha.Y,
+                        Location.Z + position.alpha.Z),
                          
-                    positionBeta);
+                    position.beta);
             }
             else
             {
                 generateLocation = grandom.GetUniformVector3D(
-                    new Vector3D(Location.X - positionAlpha.X,
-                        Location.Y - positionAlpha.Y,
-                        Location.Z - positionAlpha.Z),
-                    new Vector3D(Location.X + positionBeta.X,
-                        Location.Y + positionBeta.Y,
-                        Location.Z + positionBeta.Z));      
+                    new Vector3D(Location.X - position.alpha.X,
+                        Location.Y - position.alpha.Y,
+                        Location.Z - position.alpha.Z),
+                    new Vector3D(Location.X + position.beta.X,
+                        Location.Y + position.beta.Y,
+                        Location.Z + position.beta.Z));      
             }
 
 
             
             return new Particle(this,
                 generateLocation,
-                grandom.GetRandomVector3D(velocityDist, velocityAlpha, velocityBeta),
-                grandom.GetRandomVector3D(accelerationDist, accelerationAlpha, accelerationBeta),
-                grandom.GetRandomDouble(angleDist, angleAlpha, angleBeta), 
-                grandom.GetRandomDouble(angVelocityDist, angVelocityAlpha, angVelocityBeta),
-                grandom.GetRandomVector3D(colorDist, colorAlpha, colorBeta),
-                grandom.GetRandomDouble(transparencyDist, tranparencyAlpha, transparencyBeta),
-                grandom.GetRandomDouble(sizeDist, sizeAlpha, sizeBeta),
-                grandom.GetRandomDouble(sizeGrowthDist,sizeGrowthAlpha, sizeGrowthBeta),
-                (int)grandom.GetRandomDouble(ttlDist, ttlAlpha, ttlBeta),
+                grandom.GetRandomVector3D(velocity.distribution, velocity.alpha, velocity.beta),
+                grandom.GetRandomVector3D(acceleration.distribution, acceleration.alpha, acceleration.beta),
+                grandom.GetRandomDouble(angle.distribution, angle.alpha, angle.beta), 
+                grandom.GetRandomDouble(angularVelocity.distribution, angularVelocity.alpha, angularVelocity.beta),
+                grandom.GetRandomVector3D(color.distribution, color.alpha, color.beta),
+                grandom.GetRandomDouble(transparency.distribution, transparency.alpha, transparency.beta),
+                grandom.GetRandomDouble(size.distribution, size.alpha, size.beta),
+                grandom.GetRandomDouble(growth.distribution,growth.alpha, growth.beta),
+                (int)grandom.GetRandomDouble(ttl.distribution, ttl.alpha, ttl.beta),
                 grandom.GetUniformInt(0, NumTextures));
 
         }
@@ -265,13 +283,13 @@ namespace ParticleSystem
         {
             EmitActivity = true;
             CurrentLifeTime = 0;
-            TimeSinceLastEmit = 0;
+            TimeToNextEmit = MeanEmitDelay;
         }
 
         /** 
          * Immediately cease to emit particles.
          **/
-        private void Stop()
+        public void Stop()
         {
             EmitActivity = false;
         }
@@ -283,7 +301,7 @@ namespace ParticleSystem
         {
 
             CurrentLifeTime += MSSinceLastUpdate; // Update lifetime timer.
-            TimeSinceLastEmit += MSSinceLastUpdate; // Update emitrate timer.
+            TimeToNextEmit -= MSSinceLastUpdate; // Update emitrate timer.
 
             if (CurrentLifeTime > EmitLifetime)
             {
@@ -291,14 +309,14 @@ namespace ParticleSystem
             }
             else
             {
-                if (TimeSinceLastEmit > EmitDelay)
+                if ((TimeToNextEmit <= 0) && (EmitActivity))
                 {
                     /**
                     * If emitter is still emitting, and it's been
                     * long enough since the last emit, let's make
                     * some more particles.
                     **/
-                    TimeSinceLastEmit = 0;
+                    TimeToNextEmit = (int)grandom.GetExpDouble((double)MeanEmitDelay);
                     // If we still have room on the particle queue, make as many particles
                     // as we're allowed in this update.
                     for (int i = 0; ((i < EmitRate) && (particles.Count < MaxNumParticles)); i++)
@@ -328,6 +346,99 @@ namespace ParticleSystem
                     index--;
                 }
             }
+        }
+
+        /**
+        * Loads emitter parameters from XML file.
+        **/
+        public void LoadXMLEmitter(XmlDocument emitter)
+        {
+            XmlNode emitterPars =
+                emitter.SelectSingleNode("/ParticleSystem/EmitterParameters");
+            XmlNode particlePars =
+                emitter.SelectSingleNode("/ParticleSystem/ParticleParameters");
+            /**
+             * Load Emitter Parameters:
+             **/
+            Location = LoadXMLVector3D(emitterPars.SelectSingleNode("location"));
+            EmitDimensions = LoadXMLVector3D(emitterPars.SelectSingleNode("dimension"));
+            MaxNumParticles =
+                Convert.ToInt32(emitterPars.SelectSingleNode("maxNumParticles").
+                Attributes.GetNamedItem("x").Value);
+
+            EmitRate =
+                Convert.ToInt32(emitterPars.SelectSingleNode("emitRate").
+                Attributes.GetNamedItem("x").Value);
+            MeanEmitDelay =
+                Convert.ToInt32(emitterPars.SelectSingleNode("meanEmitDelay").
+                Attributes.GetNamedItem("x").Value);
+            EmitLifetime =
+                Convert.ToInt32(emitterPars.SelectSingleNode("emitterLifetime").
+                Attributes.GetNamedItem("x").Value);
+            PermanentParticles =
+                Convert.ToBoolean(emitterPars.SelectSingleNode("permanentParticles").
+                Attributes.GetNamedItem("x").Value);
+
+            /**
+             * Load particle randomization parameters:
+             **/
+            position = LoadXMLParameter3D(particlePars.SelectSingleNode("position"));
+            velocity = LoadXMLParameter3D(particlePars.SelectSingleNode("velocity"));
+            acceleration = LoadXMLParameter3D(particlePars.SelectSingleNode("acceleration"));
+            color = LoadXMLParameter3D(particlePars.SelectSingleNode("color"));
+            angle = LoadXMLParameterDouble(particlePars.SelectSingleNode("angle"));
+            angularVelocity = LoadXMLParameterDouble(particlePars.SelectSingleNode("angularVelocity"));
+            transparency = LoadXMLParameterDouble(particlePars.SelectSingleNode("transparency"));
+            size = LoadXMLParameterDouble(particlePars.SelectSingleNode("size"));
+            growth = LoadXMLParameterDouble(particlePars.SelectSingleNode("growth"));
+            ttl = LoadXMLParameterDouble(particlePars.SelectSingleNode("ttl"));
+
+        }
+
+
+        /** 
+         * Loads a Double parameter from the specified
+         * XMLNode.
+         **/
+        public ParameterDouble LoadXMLParameterDouble(XmlNode node)
+        {
+            ParameterDouble newPar = new ParameterDouble();
+
+            newPar.alpha = Convert.ToDouble(node.Attributes.GetNamedItem("alpha").Value);
+            newPar.beta = Convert.ToDouble(node.Attributes.GetNamedItem("beta").Value);
+            newPar.distribution = (Distribution)Enum.Parse(typeof(Distribution),
+                Convert.ToString(node.Attributes.GetNamedItem("distribution").Value));
+
+            return newPar;
+        }
+
+        /**
+         * Loads a 3D Parameter from the specified XMLNode
+         **/
+        public Parameter3D LoadXMLParameter3D(XmlNode node)
+        {
+            Parameter3D newPar = new Parameter3D();
+
+            newPar.alpha = LoadXMLVector3D(node.SelectSingleNode("alpha"));
+            newPar.beta = LoadXMLVector3D(node.SelectSingleNode("beta"));
+            newPar.distribution = (Distribution)Enum.Parse(typeof(Distribution),
+                Convert.ToString(node.SelectSingleNode("distribution").Attributes.GetNamedItem("x").Value));
+
+            return newPar;
+        }
+
+        /**
+         * Parses and returns a Vector3D from the specified xmlnode.
+         **/
+        public Vector3D LoadXMLVector3D(XmlNode node)
+        {
+            Vector3D vec = new Vector3D();
+
+            vec.X = Convert.ToDouble(node.Attributes.GetNamedItem("x").Value);
+            vec.Y = Convert.ToDouble(node.Attributes.GetNamedItem("y").Value);
+            vec.Z = Convert.ToDouble(node.Attributes.GetNamedItem("z").Value);
+
+            return vec;
         }
 
        
