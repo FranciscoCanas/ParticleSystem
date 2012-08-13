@@ -1,5 +1,3 @@
-
-
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,15 +20,13 @@ namespace ParticleTests
     public class ParticleTestSuite : Microsoft.Xna.Framework.GameComponent
     {
         Game parent;
+        private static double PARTICLE_LEVEL = 1.0;
         KeyboardState current = new KeyboardState();
         KeyboardState previous = new KeyboardState();
-           
-        
-        XNAEmitter pe1; // Smoke
-        XNAEmitter pe2; // Fire
-        
-        XNAEmitter pe3;
-        XNAEmitter pe4;
+
+
+        List<XNAEmitter> EmitterList = new List<XNAEmitter>();
+
         
         
 
@@ -38,12 +34,17 @@ namespace ParticleTests
             : base(game)
         {
             parent = game;
+            InitializeEmitters();
+        }
+
+        public void InitializeEmitters()
+        {
             // TODO: Construct any child components here
-            pe1 = new XNAEmitter(parent, "D:\\workspace\\ParticleSystem\\ParticleTests\\ParticleTestsContent\\particleEmitter1.xml");
-            pe2 = new XNAEmitter(parent, "D:\\workspace\\ParticleSystem\\ParticleTests\\ParticleTestsContent\\particleEmitter2.xml");
-            pe3 = new XNAEmitter(parent, "D:\\workspace\\ParticleSystem\\ParticleTests\\ParticleTestsContent\\particleEmitter3.xml");
-            pe4 = new XNAEmitter(parent, "D:\\workspace\\ParticleSystem\\ParticleTests\\ParticleTestsContent\\particleEmitter4.xml");        
-            
+            EmitterList.Clear();
+            EmitterList.Add(new XNAEmitter(parent, "D:\\workspace\\ParticleSystem\\ParticleTests\\ParticleTestsContent\\particleEmitter2.xml", PARTICLE_LEVEL));
+            EmitterList.Add(new XNAEmitter(parent, "D:\\workspace\\ParticleSystem\\ParticleTests\\ParticleTestsContent\\particleEmitter1.xml", PARTICLE_LEVEL));
+            EmitterList.Add(new XNAEmitter(parent, "D:\\workspace\\ParticleSystem\\ParticleTests\\ParticleTestsContent\\particleEmitter3.xml"));
+            EmitterList.Add(new XNAEmitter(parent, "D:\\workspace\\ParticleSystem\\ParticleTests\\ParticleTestsContent\\particleEmitter4.xml"));        
         }
 
         /// <summary>
@@ -53,6 +54,7 @@ namespace ParticleTests
         public override void Initialize()
         {
             // TODO: Add your initialization code here
+            
             base.Initialize();
         }
 
@@ -60,27 +62,27 @@ namespace ParticleTests
             switch (num)
             {
                 case 1:
-                    if (pe2.EmitActivity)
+                    if (EmitterList[1].EmitActivity)
                     {
-                        pe1.Stop();
-                        pe2.Stop();
+                        EmitterList[0].Stop();
+                        EmitterList[1].Stop();
                     }
                     else
                     {
-                        pe1.Start();
-                        pe2.Start();
+                        EmitterList[0].Start();
+                        EmitterList[1].Start();
                     }
                     break;
                 case 2:
-                    if (pe4.EmitActivity)
+                    if (EmitterList[3].EmitActivity)
                     {
-                        pe3.Stop();
-                        pe4.Stop();
+                        EmitterList[2].Stop();
+                        EmitterList[3].Stop();
                     }
                     else
                     {
-                        pe3.Start();
-                        pe4.Start();
+                        EmitterList[2].Start();
+                        EmitterList[3].Start();
                     }
                     break;
             }
@@ -107,24 +109,30 @@ namespace ParticleTests
             {
                 ToggleEffect(2);
             }
+            if (current.IsKeyDown(Keys.I) && !previous.IsKeyDown(Keys.I))
+            {
+                InitializeEmitters();
+            }
 
             previous = current;
             
             base.Update(gameTime);
-            if (pe1 != null ) pe1.Update(gameTime.ElapsedGameTime.Milliseconds);
-            if (pe2 != null ) pe2.Update(gameTime.ElapsedGameTime.Milliseconds);
-            if (pe3 != null) pe3.Update(gameTime.ElapsedGameTime.Milliseconds);
-            if (pe4 != null) pe4.Update(gameTime.ElapsedGameTime.Milliseconds);
+
+            foreach (XNAEmitter emitter in EmitterList)
+            {
+                if (emitter != null) emitter.Update((double)(gameTime.ElapsedGameTime.Milliseconds));
+                
+            }
             
         }
 
         public void Draw(SpriteBatch spriteBatch)
         {
 
-            pe2.Draw(spriteBatch);
-            pe4.Draw(spriteBatch);
-            pe1.Draw(spriteBatch);
-            pe3.Draw(spriteBatch);
+            foreach (XNAEmitter emitter in EmitterList)
+            {
+                if (emitter != null) emitter.Draw(spriteBatch);
+            }
                        
         }
     }

@@ -19,7 +19,7 @@ namespace ParticleTests
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         ParticleTestSuite suite1;
-        Texture2D holder;
+        
 
         public Game1()
         {
@@ -86,16 +86,10 @@ namespace ParticleTests
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.White);
+            GraphicsDevice.Clear(Color.Black);
 
             // TODO: Add your drawing code here
             spriteBatch.Begin();
-            
-            
-            
-            
-            
-            
             spriteBatch.End();
             suite1.Draw(spriteBatch);
             base.Draw(gameTime);

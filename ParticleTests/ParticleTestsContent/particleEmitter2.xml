@@ -3,11 +3,11 @@
   <!-- XNA-specific parameters go here.-->
   <XNAParameters>
     <spriteEffects x="None"></spriteEffects>
-    <blendState x="AlphaBlend"></blendState>
+    <blendState x="Additive"></blendState>
     <spriteSortMode x="Deferred"></spriteSortMode>
     <textureList>
       <texture x="fire"></texture>
-      <texture x="electric"></texture>
+      <texture x="fire"></texture>
       <texture x="smoke2"></texture>
     </textureList>
   </XNAParameters>
@@ -16,8 +16,8 @@
     <location x="300" y="350" z="0"></location>
     <dimension x="25" y="25" z="0"></dimension>
     <maxNumParticles x="500"></maxNumParticles>
-    <emitRate x="5"></emitRate>
-    <meanEmitDelay x="10"></meanEmitDelay>
+    <emitRate x="1"></emitRate>
+    <meanEmitDelay x="15"></meanEmitDelay>
     <emitterLifetime x="15000"></emitterLifetime>
     <permanentParticles x="false"></permanentParticles>
   </EmitterParameters>
@@ -30,8 +30,8 @@
     </position>
     
     <velocity>
-      <alpha x="0" y="-0.5" z="0"></alpha>
-      <beta x="0.5" y="-0.25" z="0"></beta>
+      <alpha x="0" y="-5" z="0"></alpha>
+      <beta x="5" y="-2.5" z="0"></beta>
       <distribution x="Uniform"></distribution>
     </velocity>
     
@@ -51,8 +51,9 @@
     <angle alpha="0" beta="1.0" distribution="Uniform"></angle>
     <angularVelocity alpha="0.0005" beta="0.005" distribution="Uniform"></angularVelocity>
     <transparency alpha="155.0" beta="255.0" distribution="Uniform"></transparency>
+    <transparencyDelta alpha="0.0" beta="0.0" distribution="Uniform"></transparencyDelta>
     <size alpha="0.25" beta="0.005" distribution="Normal"></size>
-    <growth alpha="1.0" beta="1.01" distribution="Uniform"></growth>
+    <growth alpha="1.0" beta="1.0001" distribution="Uniform"></growth>
     <ttl alpha="800" beta="100" distribution="Normal"></ttl>
   </ParticleParameters>
     

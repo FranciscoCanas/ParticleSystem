@@ -54,7 +54,15 @@ namespace ParticleSystem
          **/
         public Vector3D color { get; set; }
 
+        /**
+         * Alpha value 0 - 1.0
+         **/
         public double transparency { get; set; }
+
+        /**
+         * Amount of alpha change at every update.
+         **/
+        public double transparencyDelta { get; set; }
 
         /**
          * Scale at which to draw particle.
@@ -70,7 +78,7 @@ namespace ParticleSystem
         /**
          * Number of updates this particle is active for. 
          **/
-        public int TTL { get; set; }
+        public double TTL { get; set; }
 
         /**
          * Index of sprite/Texture used by this particle.
@@ -90,10 +98,11 @@ namespace ParticleSystem
             double angle,
             double angVel,
             Vector3D col,
-            double alpha,
+            double trans,
+            double transDelta,
             double size,
             double sizeDelta,
-            int ttl,
+            double ttl,
             int txtIndex
             )
         {
@@ -104,7 +113,8 @@ namespace ParticleSystem
             this.angle = angle;
             this.angularVelocity = angVel;
             this.color = col;
-            this.transparency = alpha;
+            this.transparency = trans;
+            this.transparencyDelta = transDelta;
             this.size = size;
             this.sizeDelta = sizeDelta;
             this.TTL = ttl;
@@ -117,20 +127,28 @@ namespace ParticleSystem
         /**
          * Updated every tick.
          **/
-        public void Update(int TimeSinceLastUpdate)
+        public void Update(double MsSinceLastUpdate)
         {
-            TTL-=TimeSinceLastUpdate;
+            TTL-=MsSinceLastUpdate;
+            double SecSinceLastUpdate = MsSinceLastUpdate / 1000.0;
+            //MsSinceLastUpdate = 1;
 
-            position.X += velocity.X;
-            position.Y += velocity.Y;
-            position.Z += velocity.Z;
+            position.X += velocity.X * SecSinceLastUpdate;
+            position.Y += velocity.Y * SecSinceLastUpdate;
+            position.Z += velocity.Z * SecSinceLastUpdate;
 
-            velocity.X += acceleration.X;
-            velocity.Y += acceleration.Y;
-            velocity.Z += acceleration.Z;
+            velocity.X += acceleration.X * SecSinceLastUpdate;
+            velocity.Y += acceleration.Y * SecSinceLastUpdate;
+            velocity.Z += acceleration.Z * SecSinceLastUpdate;
 
-            angle += angularVelocity;
-            size *= sizeDelta;
+            angle += angularVelocity * SecSinceLastUpdate / 360.0;
+            size *= (1.0 + sizeDelta * SecSinceLastUpdate);
+            transparency += transparencyDelta * SecSinceLastUpdate;
+
+            /**
+             * Kill particle if it's no longer visible
+             **/
+            if (transparency < 0.0) TTL = 0;
 
         }    
         

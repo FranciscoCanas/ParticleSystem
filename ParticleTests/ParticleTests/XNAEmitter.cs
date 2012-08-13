@@ -14,7 +14,7 @@ namespace ParticleTests
     {
         Game parent;
         SpriteEffects spriteEffects = SpriteEffects.None;
-        BlendState blendState = BlendState.AlphaBlend;
+        BlendState blendState = BlendState.Additive;
         SpriteSortMode spriteSortMode = SpriteSortMode.Deferred;
 
         private List<Texture2D> TextureList = new List<Texture2D>();
@@ -25,7 +25,7 @@ namespace ParticleTests
          * XML-based contructor. Initializes emitter
          * with parameters from xmlFileName.
          **/
-        public XNAEmitter(Game p, String xmlFileName) : base()
+        public XNAEmitter(Game p, String xmlFileName, double pLevel = 1.0) : base(pLevel)
         {
             XmlDocument doc = new XmlDocument();
 
@@ -47,6 +47,7 @@ namespace ParticleTests
             double angVelocityMean, double angVelocityVar, Distribution angVelDist,
             Vector3D colorMean, Vector3D colorVar, Distribution colDist,
             double alphaMean, double alphaVar, Distribution transDist,
+            double alphaDeltaMean, double alphaDeltaVar, Distribution transDeltaDist,
             double sizeMean, double sizeVar, Distribution sizeDist,
             double sizeDeltaMean, double sizeDeltaVar, Distribution sizeGrowthDist,
             double ttlMean, double ttlVar, Distribution ttlDist,
@@ -64,6 +65,7 @@ namespace ParticleTests
             angVelocityMean, angVelocityVar, angVelDist,
             colorMean, colorVar, colDist,
             alphaMean, alphaVar, transDist,
+            alphaDeltaMean, alphaDeltaVar, transDeltaDist,
             sizeMean, sizeVar, sizeDist,
             sizeDeltaMean, sizeDeltaVar, sizeGrowthDist,
             ttlMean, ttlVar,ttlDist,
@@ -78,6 +80,9 @@ namespace ParticleTests
              
         }
 
+        /**
+         * Loads emitter parameters from XML Document.
+         **/
         public void LoadXNAXMLParameters(XmlDocument doc)
         {
             XmlNode XNAPars =
@@ -88,10 +93,27 @@ namespace ParticleTests
             spriteEffects = (SpriteEffects)Enum.Parse(typeof(SpriteEffects),
                 Convert.ToString(XNAPars.SelectSingleNode("spriteEffects").
                 Attributes.GetNamedItem("x").Value));
-            /**
-            blendState = (BlendState)Enum.Parse(typeof(BlendState),
-                Convert.ToString(XNAPars.SelectSingleNode("blendState").
-                Attributes.GetNamedItem("x").Value));**/
+
+
+            String blendString = Convert.ToString(XNAPars.SelectSingleNode("blendState").
+                Attributes.GetNamedItem("x").Value);
+
+            if (blendString == "AlphaBlend")
+            {
+                blendState = BlendState.AlphaBlend;
+            }
+            if (blendString == "NonPremultiplied")
+            {
+                blendState = BlendState.NonPremultiplied;
+            }
+            if (blendString == "Opaque")
+            {
+                blendState = BlendState.Opaque;
+            }
+            else
+            {
+                blendState = BlendState.Additive;
+            }
 
             spriteSortMode = (SpriteSortMode)Enum.Parse(typeof(SpriteSortMode),
                 Convert.ToString(XNAPars.SelectSingleNode("spriteSortMode").
@@ -122,6 +144,16 @@ namespace ParticleTests
             {
                 particleTexture = texture;
             }
+        }
+
+        /**
+         * A setter for manually modifying the emitter's
+         * blendstate. Useful for changing advanced blendstate
+         * options not doable through the XML init.
+         **/
+        public void SetBlendState(BlendState bstate)
+        {
+            blendState = bstate;
         }
 
        

@@ -6,7 +6,7 @@
     <blendState x="AlphaBlend"></blendState>
     <spriteSortMode x="Deferred"></spriteSortMode>
     <textureList>
-      <texture x="smoke2"></texture>
+      <texture x="fire"></texture>
     </textureList>
   </XNAParameters>
   <!-- Explicit parameters for emitter go here: -->
@@ -16,7 +16,7 @@
     <maxNumParticles x="500"></maxNumParticles>
     <emitRate x="25"></emitRate>
     <meanEmitDelay x="5"></meanEmitDelay>
-    <emitterLifetime x="500"></emitterLifetime>
+    <emitterLifetime x="250"></emitterLifetime>
     <permanentParticles x="false"></permanentParticles>
   </EmitterParameters>
   <!-- Random parameters for particle generation go here:-->
@@ -27,18 +27,20 @@
       <distribution x="Normal"></distribution>
     </position>
 
+    <speed alpha="0.2" beta="0.2" distribution="Uniform"></speed>
+    <direction alpha="" beta="0.2" distribution="Uniform"></direction>
+
     <velocity>
-      <alpha x="-1" y="-2" z="0"></alpha>
-      <beta x="2" y="1" z="0"></beta>
+      <alpha x="-0.2" y="-0.2" z="0"></alpha>
+      <beta x="0.2" y="0.2" z="0"></beta>
       <distribution x="Uniform"></distribution>
     </velocity>
 
     <acceleration>
-      <alpha x="0.01" y="-0.01" z="0"></alpha>
+      <alpha x="0.0001" y="-0.0001" z="0"></alpha>
       <beta x="0.0" y="0.0" z="0"></beta>
       <distribution x="Uniform"></distribution>
     </acceleration>
-
 
     <color>
       <alpha x="255" y="255" z="255"></alpha>
@@ -47,11 +49,12 @@
     </color>
 
     <angle alpha="0" beta="1.0" distribution="Uniform"></angle>
-    <angularVelocity alpha="0.0005" beta="0.005" distribution="Uniform"></angularVelocity>
+    <angularVelocity alpha="5" beta="25" distribution="Uniform"></angularVelocity>
     <transparency alpha="155.0" beta="255.0" distribution="Uniform"></transparency>
-    <size alpha="0.25" beta="0.005" distribution="Normal"></size>
-    <growth alpha="1.0" beta="1.01" distribution="Uniform"></growth>
-    <ttl alpha="5000" beta="100" distribution="Normal"></ttl>
+    <transparencyDelta alpha="-0.75" beta="-25" distribution="Uniform"></transparencyDelta>
+    <size alpha="0.25" beta="0.25" distribution="Normal"></size>
+    <growth alpha="0.0" beta="0.1" distribution="Uniform"></growth>
+    <ttl alpha="150" beta="100" distribution="Normal"></ttl>
   </ParticleParameters>
 
 </ParticleSystem>

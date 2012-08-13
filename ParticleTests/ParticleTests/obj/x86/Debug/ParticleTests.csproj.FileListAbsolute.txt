@@ -16,3 +16,4 @@ D:\workspace\ParticleSystem\ParticleTests\ParticleTests\bin\x86\Debug\GRNG.pdb
 D:\workspace\ParticleSystem\ParticleTests\ParticleTests\bin\x86\Debug\Content\particleEmitter2.xml
 D:\workspace\ParticleSystem\ParticleTests\ParticleTests\bin\x86\Debug\Content\particleEmitter3.xml
 D:\workspace\ParticleSystem\ParticleTests\ParticleTests\bin\x86\Debug\Content\particleEmitter4.xml
+D:\workspace\ParticleSystem\ParticleTests\ParticleTests\bin\x86\Debug\Content\TestSuite.xnb
