@@ -48,8 +48,8 @@
 
     <angle alpha="0" beta="1.0" distribution="Uniform"></angle>
     <angularVelocity alpha="0" beta="10" distribution="Uniform"></angularVelocity>
-    <transparency alpha="0.0" beta="1.0" distribution="Uniform"></transparency>
-    <transparencyDelta alpha="-1.5" beta="-0.75" distribution="Uniform"></transparencyDelta>
+    <transparency alpha="1.0" beta="1.0" distribution="Fixed"></transparency>
+    <transparencyDelta alpha="-3.0" beta="-1.0" distribution="Uniform"></transparencyDelta>
     <size alpha="0.5" beta="0.25" distribution="Normal"></size>
     <growth alpha="0.0" beta="0.1" distribution="Uniform"></growth>
     <ttl alpha="5000" beta="100" distribution="Normal"></ttl>

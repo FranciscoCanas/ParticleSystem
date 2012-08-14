@@ -25,10 +25,10 @@ namespace ParticleTests
          * XML-based contructor. Initializes emitter
          * with parameters from xmlFileName.
          **/
-        public XNAEmitter(Game p, String xmlFileName, double pLevel = 1.0) : base(pLevel)
+        public XNAEmitter(Game p, Vector2 location, String xmlFileName, double pLevel = 1.0, double pScaling = 1.0) : base(pLevel, pScaling)
         {
             XmlDocument doc = new XmlDocument();
-
+            Location = new Vector3D(location.X, location.Y, 0);
             parent = p;
             doc.Load(xmlFileName);
             LoadXMLEmitter(doc);
@@ -78,6 +78,14 @@ namespace ParticleTests
              permParts)
         {
              
+        }
+
+        /**
+         * Wrapper for Location Vector3D.
+         **/
+        public void SetLocation(Vector2 location)
+        {
+            Location = new Vector3D(location.X, location.Y, 0);
         }
 
         /**
@@ -157,7 +165,6 @@ namespace ParticleTests
         }
 
        
-
         /**
          * XNA-specific Draw method.
          **/

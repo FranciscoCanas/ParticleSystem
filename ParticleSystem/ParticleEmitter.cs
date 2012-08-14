@@ -20,6 +20,11 @@ namespace ParticleSystem
         private double GlobalParticleLevels;
 
         /**
+         * Size scaling.
+         **/
+        private double GlobalScaling;
+
+        /**
          * Random number generator used for initializing particles.
          **/
         
@@ -83,9 +88,11 @@ namespace ParticleSystem
         /**
          * Constructors
          **/
-        public ParticleEmitter(double pLevel)
+        public ParticleEmitter(double pLevel = 1.0, double pScaling = 1.0)
         {
             GlobalParticleLevels = pLevel;
+            GlobalScaling = pScaling;
+            CurrentLifeTime = 0;
             grandom = new GRandom();
             particles = new List<Particle>();
         }
@@ -93,9 +100,9 @@ namespace ParticleSystem
         /**
          * Constructor taking filename with particle parameters.
          **/
-        public ParticleEmitter(String paramFileName, double pLevel = 1.0 ) : this(pLevel)
+        public ParticleEmitter(Vector3D location, String paramFileName, double pLevel = 1.0, double pScaling = 1.0) : this(pLevel, pScaling)
         {
-            GlobalParticleLevels = pLevel;    
+            Location = location;
         }
 
         /**
@@ -243,36 +250,48 @@ namespace ParticleSystem
             EmitActivity = false;
         }
 
+        /**
+         * Returns true if emitter is either currently emitting, has not yet started to emit, or
+         * no longer emitting but still has particles in queue to be updated.
+         **/
+        public bool IsAlive()
+        {
+            return ((EmitActivity) || (CurrentLifeTime == 0) || (particles.Count != 0));
+        }
+
         /** 
          * Updates every particle for this emitter.
          **/
         public void Update(double MsSinceLastUpdate /**MilliSeconds**/)
         {
-
-            CurrentLifeTime += MsSinceLastUpdate; // Update lifetime timer.
-            TimeToNextEmit -= MsSinceLastUpdate; // Update emitrate timer.
-
-            if (CurrentLifeTime > EmitLifetime)
+            if (EmitActivity)
             {
-                Stop();
-            }
-            else
-            {
-                if ((TimeToNextEmit <= 0) && (EmitActivity))
+                CurrentLifeTime += MsSinceLastUpdate; // Update lifetime timer.
+                TimeToNextEmit -= MsSinceLastUpdate; // Update emitrate timer.
+
+
+                if (CurrentLifeTime > EmitLifetime)
                 {
-                    /**
-                    * If emitter is still emitting, and it's been
-                    * long enough since the last emit, let's make
-                    * some more particles.
-                    **/
-                    TimeToNextEmit = (int)grandom.GetExpDouble((double)MeanEmitDelay);
-                    // If we still have room on the particle queue, make as many particles
-                    // as we're allowed in this update.
-                    for (int i = 0; ((i < EmitRate) && (particles.Count < MaxNumParticles)); i++)
+                    Stop();
+                }
+                else
+                {
+                    if ((TimeToNextEmit <= 0) && (EmitActivity))
                     {
-                        particles.Add(GenerateParticle());
-                    }
+                        /**
+                        * If emitter is still emitting, and it's been
+                        * long enough since the last emit, let's make
+                        * some more particles.
+                        **/
+                        TimeToNextEmit = (int)grandom.GetExpDouble((double)MeanEmitDelay);
+                        // If we still have room on the particle queue, make as many particles
+                        // as we're allowed in this update.
+                        for (int i = 0; ((i < EmitRate) && (particles.Count < MaxNumParticles)); i++)
+                        {
+                            particles.Add(GenerateParticle());
+                        }
 
+                    }
                 }
             }
             
@@ -309,7 +328,7 @@ namespace ParticleSystem
             /**
              * Load Emitter Parameters:
              **/
-            Location = LoadXMLVector3D(emitterPars.SelectSingleNode("location"));
+            //Location = LoadXMLVector3D(emitterPars.SelectSingleNode("location"));
             EmitDimensions = LoadXMLVector3D(emitterPars.SelectSingleNode("dimension"));
             MaxNumParticles =
                 (int)(GlobalParticleLevels * Convert.ToInt32(emitterPars.SelectSingleNode("maxNumParticles").
@@ -345,10 +364,13 @@ namespace ParticleSystem
             transparency = LoadXMLParameterDouble(particlePars.SelectSingleNode("transparency"));
             transparencyDelta = LoadXMLParameterDouble(particlePars.SelectSingleNode("transparencyDelta"));
             size = LoadXMLParameterDouble(particlePars.SelectSingleNode("size"));
+            size.alpha *= GlobalScaling;
+            size.beta *= GlobalScaling;
             growth = LoadXMLParameterDouble(particlePars.SelectSingleNode("growth"));
             ttl = LoadXMLParameterDouble(particlePars.SelectSingleNode("ttl"));
 
         }
+
 
         /**
          * Transposes a parameter using magnitude and direction to 
