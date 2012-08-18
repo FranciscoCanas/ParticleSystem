@@ -26,13 +26,12 @@ namespace ParticleTests
         MouseState currentMouse = new MouseState();
         MouseState previousMouse = new MouseState();
         Vector2 location = new Vector2(250, 250);
+        int currentEffect = 1;
 
-
+        List<XNAEmitter> CurrentEmitter = new List<XNAEmitter>();
         List<XNAEmitter> EmitterList1 = new List<XNAEmitter>();
         List<XNAEmitter> EmitterList2 = new List<XNAEmitter>();
-
-        
-        
+        List<XNAEmitter> EmitterList3 = new List<XNAEmitter>();
 
         public ParticleTestSuite(Game game)
             : base(game)
@@ -46,10 +45,13 @@ namespace ParticleTests
             // TODO: Construct any child components here
             EmitterList1.Clear();
             EmitterList2.Clear();
+            EmitterList3.Clear();
             EmitterList1.Add(new XNAEmitter(parent, new Vector2(250.0f, 250.0f), "D:\\workspace\\ParticleSystem\\ParticleTests\\ParticleTestsContent\\particleEmitter2.xml", PARTICLE_LEVEL));
             EmitterList1.Add(new XNAEmitter(parent, new Vector2(250.0f, 250.0f), "D:\\workspace\\ParticleSystem\\ParticleTests\\ParticleTestsContent\\particleEmitter1.xml", PARTICLE_LEVEL));
             EmitterList2.Add(new XNAEmitter(parent, new Vector2(350.0f, 250.0f), "D:\\workspace\\ParticleSystem\\ParticleTests\\ParticleTestsContent\\particleEmitter3.xml", PARTICLE_LEVEL, 0.15));
-            EmitterList2.Add(new XNAEmitter(parent, new Vector2(350.0f, 250.0f), "D:\\workspace\\ParticleSystem\\ParticleTests\\ParticleTestsContent\\particleEmitter4.xml", PARTICLE_LEVEL, 0.15));        
+            EmitterList2.Add(new XNAEmitter(parent, new Vector2(350.0f, 250.0f), "D:\\workspace\\ParticleSystem\\ParticleTests\\ParticleTestsContent\\particleEmitter4.xml", PARTICLE_LEVEL, 0.15));
+            EmitterList3.Add(new XNAEmitter(parent, new Vector2(350.0f, 250.0f), "D:\\workspace\\ParticleSystem\\ParticleTests\\ParticleTestsContent\\squareEmitter.xml", PARTICLE_LEVEL, 1.0));
+            EmitterList3.Add(new XNAEmitter(parent, new Vector2(350.0f, 250.0f), "D:\\workspace\\ParticleSystem\\ParticleTests\\ParticleTestsContent\\squareEmitter.xml", PARTICLE_LEVEL, 1.0));
         }
 
         /// <summary>
@@ -63,24 +65,34 @@ namespace ParticleTests
             base.Initialize();
         }
 
-        public void ToggleEffect(int num) {
+        public void ToggleEffect(int num) 
+        {
             switch (num)
             {
                 case 1:
-             
-                        
-                        EmitterList1.Add(new XNAEmitter(parent, location, "D:\\workspace\\ParticleSystem\\ParticleTests\\ParticleTestsContent\\particleEmitter2.xml", PARTICLE_LEVEL));
-                        EmitterList1.Add(new XNAEmitter(parent, location, "D:\\workspace\\ParticleSystem\\ParticleTests\\ParticleTestsContent\\particleEmitter1.xml", PARTICLE_LEVEL));
-                        EmitterList1[EmitterList1.Count-2].Start();
-                        EmitterList1[EmitterList1.Count-1].Start();
+                    
+                    EmitterList1.Add(new XNAEmitter(parent, location, "D:\\workspace\\ParticleSystem\\ParticleTests\\ParticleTestsContent\\particleEmitter2.xml", PARTICLE_LEVEL));
+                    EmitterList1.Add(new XNAEmitter(parent, location, "D:\\workspace\\ParticleSystem\\ParticleTests\\ParticleTestsContent\\particleEmitter1.xml", PARTICLE_LEVEL));
+                    TriggerEffects(EmitterList1);
                     break;
                 case 2:
-                        EmitterList2.Add(new XNAEmitter(parent, location, "D:\\workspace\\ParticleSystem\\ParticleTests\\ParticleTestsContent\\particleEmitter3.xml", PARTICLE_LEVEL, 0.25));
-                        EmitterList2.Add(new XNAEmitter(parent, location, "D:\\workspace\\ParticleSystem\\ParticleTests\\ParticleTestsContent\\particleEmitter4.xml", PARTICLE_LEVEL, 0.25));
-                        EmitterList2[EmitterList2.Count-2].Start();
-                        EmitterList2[EmitterList2.Count-1].Start();
+                    EmitterList2.Add(new XNAEmitter(parent, location, "D:\\workspace\\ParticleSystem\\ParticleTests\\ParticleTestsContent\\particleEmitter3.xml", PARTICLE_LEVEL, 0.25));
+                    EmitterList2.Add(new XNAEmitter(parent, location, "D:\\workspace\\ParticleSystem\\ParticleTests\\ParticleTestsContent\\particleEmitter4.xml", PARTICLE_LEVEL, 0.25));
+                    TriggerEffects(EmitterList2);
+                    break;
+                case 3:
+                    EmitterList3.Add(new XNAEmitter(parent, location, "D:\\workspace\\ParticleSystem\\ParticleTests\\ParticleTestsContent\\squareEmitter.xml", PARTICLE_LEVEL, 1.0));
+                    EmitterList3.Add(new XNAEmitter(parent, location, "D:\\workspace\\ParticleSystem\\ParticleTests\\ParticleTestsContent\\squareEmitter.xml", PARTICLE_LEVEL, 1.0));
+                    TriggerEffects(EmitterList3);
                     break;
             }
+        }
+
+        
+        private void TriggerEffects(List<XNAEmitter> list)
+        {
+            list[list.Count - 2].Start();
+            list[list.Count - 1].Start();
         }
 
         /// <summary>
@@ -96,13 +108,13 @@ namespace ParticleTests
             if (currentMouse.LeftButton == ButtonState.Released && previousMouse.LeftButton == ButtonState.Pressed)
             {
                 location = new Vector2(currentMouse.X, currentMouse.Y);
-                ToggleEffect(2);
+                ToggleEffect(currentEffect);
             }
 
             if (currentMouse.RightButton == ButtonState.Released && previousMouse.RightButton == ButtonState.Pressed)
             {
                 location = new Vector2(currentMouse.X, currentMouse.Y);
-                ToggleEffect(1);
+                ToggleEffect(currentEffect);
             }
 
             if (current.IsKeyDown(Keys.Escape) && !previous.IsKeyDown(Keys.Escape))
@@ -111,11 +123,15 @@ namespace ParticleTests
             }
             if (current.IsKeyDown(Keys.D1) && !previous.IsKeyDown(Keys.D1))
             {
-                ToggleEffect(1);
+                currentEffect = 1;
             }
             if (current.IsKeyDown(Keys.D2) && !previous.IsKeyDown(Keys.D2))
             {
-                ToggleEffect(2);
+                currentEffect = 2;
+            }
+            if (current.IsKeyDown(Keys.D3) && !previous.IsKeyDown(Keys.D3))
+            {
+                currentEffect = 3;
             }
             if (current.IsKeyDown(Keys.I) && !previous.IsKeyDown(Keys.I))
             {
@@ -142,28 +158,30 @@ namespace ParticleTests
             previousMouse = currentMouse;
             UpdateEmitterList(EmitterList1, gameTime);
             UpdateEmitterList(EmitterList2, gameTime);
-            
-            base.Update(gameTime);
-
-          
-            
+            UpdateEmitterList(EmitterList3, gameTime);
+            base.Update(gameTime); 
         }
 
+        /**
+         *  
+         **/
         private void UpdateEmitterList(List<XNAEmitter> list, GameTime gameTime)
         {
             for (int index = 0; index < list.Count; index++)
             {
                 if (list[index].IsAlive()) list[index].Update((double)(gameTime.ElapsedGameTime.Milliseconds));
                 else list.RemoveAt(index);
-
             }
-
         }
 
+        /**
+         * 
+         **/
         public void Draw(SpriteBatch spriteBatch)
         {
             DrawEmitterList(EmitterList1, spriteBatch);
-            DrawEmitterList(EmitterList2, spriteBatch);           
+            DrawEmitterList(EmitterList2, spriteBatch);
+            DrawEmitterList(EmitterList3, spriteBatch);           
         }
 
         private void DrawEmitterList(List<XNAEmitter> list, SpriteBatch spriteBatch)

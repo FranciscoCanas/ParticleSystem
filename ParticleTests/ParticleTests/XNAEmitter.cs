@@ -12,6 +12,7 @@ namespace ParticleTests
 {
     class XNAEmitter : ParticleEmitter
     {
+        /**Game parent;**/
         Game parent;
         SpriteEffects spriteEffects = SpriteEffects.None;
         BlendState blendState = BlendState.Additive;
@@ -96,8 +97,6 @@ namespace ParticleTests
             XmlNode XNAPars =
                 doc.SelectSingleNode("/ParticleSystem/XNAParameters");
 
-            
-            
             spriteEffects = (SpriteEffects)Enum.Parse(typeof(SpriteEffects),
                 Convert.ToString(XNAPars.SelectSingleNode("spriteEffects").
                 Attributes.GetNamedItem("x").Value));
@@ -129,8 +128,14 @@ namespace ParticleTests
 
             foreach (XmlNode texture in XNAPars.SelectSingleNode("textureList"))
             {
+                /** Old way of doing it using Game class:**/
                 Texture2D n = parent.Content.Load<Texture2D>(
                     Convert.ToString(texture.Attributes.GetNamedItem("x").Value));
+                 
+                /** New way using TextureManager class:
+                Texture2D n = TextureManager.GetTexture(
+                    Convert.ToString(texture.Attributes.GetNamedItem("x").Value));
+                 **/
                 
                 LoadTexture(n);
             }
@@ -172,7 +177,7 @@ namespace ParticleTests
         {
             
             Texture2D DrawTexture = particleTexture;
-
+            /**spriteBatch.End();**/
             spriteBatch.Begin(spriteSortMode, blendState);
             foreach (Particle p in particles)
             {
@@ -182,19 +187,21 @@ namespace ParticleTests
                     {
                         DrawTexture = TextureList[p.TextureIndex];
                     }
-                    spriteBatch.Draw(DrawTexture, 
+                    spriteBatch.Draw(
+                        DrawTexture, 
                         new Vector2((float)p.position.X, (float)p.position.Y), 
-                        new Rectangle(0,0, particleTexture.Width, particleTexture.Height), 
-                        new Color((float)p.color.X, (float)p.color.Y, (float)p.color.Z, (float)p.transparency), 
+                        new Rectangle(0,0, DrawTexture.Width, DrawTexture.Height), 
+                        new Color((int)p.color.X, (int)p.color.Y, (int)p.color.Z, (int)(p.transparency * 255)),
                         (float)p.angle,
-                        new Vector2(particleTexture.Width / 2, particleTexture.Height / 2), 
+                        new Vector2(DrawTexture.Width / 2, DrawTexture.Height / 2), 
                         (float)p.size, 
-                        spriteEffects, 0f); 
+                        spriteEffects, 
+                        0f); 
 
                 }
             }
-
             spriteBatch.End();
+            /**spriteBatch.Begin();**/
             
         }
     }

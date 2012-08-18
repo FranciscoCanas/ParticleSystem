@@ -17,3 +17,5 @@ D:\workspace\ParticleSystem\ParticleTests\ParticleTests\bin\x86\Debug\Content\pa
 D:\workspace\ParticleSystem\ParticleTests\ParticleTests\bin\x86\Debug\Content\particleEmitter3.xml
 D:\workspace\ParticleSystem\ParticleTests\ParticleTests\bin\x86\Debug\Content\particleEmitter4.xml
 D:\workspace\ParticleSystem\ParticleTests\ParticleTests\bin\x86\Debug\Content\TestSuite.xnb
+D:\workspace\ParticleSystem\ParticleTests\ParticleTests\bin\x86\Debug\Content\square_particle.xnb
+D:\workspace\ParticleSystem\ParticleTests\ParticleTests\bin\x86\Debug\Content\squareEmitter.xml

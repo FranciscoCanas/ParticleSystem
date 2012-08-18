@@ -3,10 +3,12 @@
   <!-- XNA-specific parameters go here.-->
   <XNAParameters>
     <spriteEffects x="None"></spriteEffects>
-    <blendState x="Additive"></blendState>
+    <blendState x="AlphaBlend"></blendState>
     <spriteSortMode x="Deferred"></spriteSortMode>
     <textureList>
       <texture x="smoke"></texture>
+      <texture x="electric"></texture>
+      
     </textureList>
   </XNAParameters>
   <!-- Explicit parameters for emitter go here: -->
@@ -50,7 +52,7 @@
     <angularVelocity alpha="0" beta="10" distribution="Uniform"></angularVelocity>
     <transparency alpha="1.0" beta="1.0" distribution="Fixed"></transparency>
     <transparencyDelta alpha="-3.0" beta="-1.0" distribution="Uniform"></transparencyDelta>
-    <size alpha="0.5" beta="0.25" distribution="Normal"></size>
+    <size alpha="1.0" beta="0.25" distribution="Normal"></size>
     <growth alpha="0.0" beta="0.1" distribution="Uniform"></growth>
     <ttl alpha="5000" beta="100" distribution="Normal"></ttl>
   </ParticleParameters>

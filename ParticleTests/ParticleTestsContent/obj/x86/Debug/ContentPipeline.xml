@@ -55,6 +55,15 @@
       <Output>D:\workspace\ParticleSystem\ParticleTests\ParticleTests\bin\x86\Debug\Content\TestSuite.xnb</Output>
       <Time>2012-08-02T14:39:15.7823593-04:00</Time>
     </Item>
+    <Item>
+      <Source>square_particle.png</Source>
+      <Name>square_particle</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>D:\workspace\ParticleSystem\ParticleTests\ParticleTests\bin\x86\Debug\Content\square_particle.xnb</Output>
+      <Time>2012-08-18T12:50:07.0767567-04:00</Time>
+    </Item>
     <BuildSuccessful>true</BuildSuccessful>
     <Settings>
       <TargetPlatform>Windows</TargetPlatform>

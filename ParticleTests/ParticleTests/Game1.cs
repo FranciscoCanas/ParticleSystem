@@ -20,7 +20,6 @@ namespace ParticleTests
         SpriteBatch spriteBatch;
         ParticleTestSuite suite1;
         
-
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -38,7 +37,7 @@ namespace ParticleTests
             // TODO: Add your initialization logic here
 
             suite1 = new ParticleTestSuite(this);
-           
+            this.IsMouseVisible = true;
             base.Initialize();
         }
 
@@ -74,8 +73,7 @@ namespace ParticleTests
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
                 this.Exit();
 
-            // TODO: Add your update logic here
-
+            // TODO: Add your update logic here:
             base.Update(gameTime);
             suite1.Update(gameTime);
         }
