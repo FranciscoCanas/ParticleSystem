@@ -95,7 +95,7 @@ namespace ParticleTests
         public void LoadXNAXMLParameters(XmlDocument doc)
         {
             XmlNode XNAPars =
-                doc.SelectSingleNode("/ParticleSystem/XNAParameters");
+                doc.SelectSingleNode("/Emitter/XNAParameters");
 
             spriteEffects = (SpriteEffects)Enum.Parse(typeof(SpriteEffects),
                 Convert.ToString(XNAPars.SelectSingleNode("spriteEffects").

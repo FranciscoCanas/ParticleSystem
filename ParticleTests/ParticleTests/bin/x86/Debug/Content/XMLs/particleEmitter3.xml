@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<ParticleSystem>
+<Emitter>
   <!-- XNA-specific parameters go here.-->
   <XNAParameters>
     <spriteEffects x="None"></spriteEffects>
@@ -57,5 +57,5 @@
     <ttl alpha="150" beta="100" distribution="Normal"></ttl>
   </ParticleParameters>
 
-</ParticleSystem>
+</Emitter>
 

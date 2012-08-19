@@ -317,17 +317,10 @@ namespace ParticleSystem
         }
 
         /**
-        * Loads emitter parameters from XML file.
-        **/
-        public void LoadXMLEmitter(XmlDocument emitter)
+         * Loads emitter parameters from XML node
+         **/
+        public void LoadXMLEmitterPars(XmlNode emitterPars)
         {
-            XmlNode emitterPars =
-                emitter.SelectSingleNode("/ParticleSystem/EmitterParameters");
-            XmlNode particlePars =
-                emitter.SelectSingleNode("/ParticleSystem/ParticleParameters");
-            /**
-             * Load Emitter Parameters:
-             **/
             //Location = LoadXMLVector3D(emitterPars.SelectSingleNode("location"));
             EmitDimensions = LoadXMLVector3D(emitterPars.SelectSingleNode("dimension"));
             MaxNumParticles =
@@ -346,10 +339,13 @@ namespace ParticleSystem
             PermanentParticles =
                 Convert.ToBoolean(emitterPars.SelectSingleNode("permanentParticles").
                 Attributes.GetNamedItem("x").Value);
+        }
 
-            /**
-             * Load particle randomization parameters:
-             **/
+        /**
+         * Loads particle parameters from xml node.
+         **/
+        public void LoadXMLParticlePars(XmlNode particlePars)
+        {
             position = LoadXMLParameter3D(particlePars.SelectSingleNode("position"));
             velocity = LoadXMLParameter3D(particlePars.SelectSingleNode("velocity"));
             /**
@@ -368,7 +364,28 @@ namespace ParticleSystem
             size.beta *= GlobalScaling;
             growth = LoadXMLParameterDouble(particlePars.SelectSingleNode("growth"));
             ttl = LoadXMLParameterDouble(particlePars.SelectSingleNode("ttl"));
+        }
 
+
+
+        /**
+        * Loads emitter parameters from XML file.
+        **/
+        public void LoadXMLEmitter(XmlDocument emitter)
+        {
+            XmlNode emitterPars =
+                emitter.SelectSingleNode("/Emitter/EmitterParameters");
+            XmlNode particlePars =
+                emitter.SelectSingleNode("/Emitter/ParticleParameters");
+            /**
+             * Load Emitter Parameters:
+             **/
+            LoadXMLEmitterPars(emitterPars);
+
+            /**
+             * Load particle randomization parameters:
+             **/
+            LoadXMLParticlePars(particlePars);
         }
 
 

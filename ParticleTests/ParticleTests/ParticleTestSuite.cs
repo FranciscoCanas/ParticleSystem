@@ -21,11 +21,15 @@ namespace ParticleTests
     {
         Game parent;
         private static double PARTICLE_LEVEL = 1.0;
+        private static String XML_DIR = "Content\\XMLs\\";
         KeyboardState current = new KeyboardState();
         KeyboardState previous = new KeyboardState();
         MouseState currentMouse = new MouseState();
         MouseState previousMouse = new MouseState();
         Vector2 location = new Vector2(250, 250);
+
+        Projectile tester1;
+
         int currentEffect = 1;
 
         List<XNAEmitter> CurrentEmitter = new List<XNAEmitter>();
@@ -37,6 +41,22 @@ namespace ParticleTests
             : base(game)
         {
             parent = game;
+            tester1 = new Projectile(
+                XML_DIR + "Projectile1.xml",
+                new Vector3D(),
+                new Vector3D(),
+                new Vector3D(),
+                0.0,
+                0.0,
+                new Vector3D(),
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0);
+
+            
             InitializeEmitters();
         }
 
@@ -46,12 +66,12 @@ namespace ParticleTests
             EmitterList1.Clear();
             EmitterList2.Clear();
             EmitterList3.Clear();
-            EmitterList1.Add(new XNAEmitter(parent, new Vector2(250.0f, 250.0f), "D:\\workspace\\ParticleSystem\\ParticleTests\\ParticleTestsContent\\particleEmitter2.xml", PARTICLE_LEVEL));
-            EmitterList1.Add(new XNAEmitter(parent, new Vector2(250.0f, 250.0f), "D:\\workspace\\ParticleSystem\\ParticleTests\\ParticleTestsContent\\particleEmitter1.xml", PARTICLE_LEVEL));
-            EmitterList2.Add(new XNAEmitter(parent, new Vector2(350.0f, 250.0f), "D:\\workspace\\ParticleSystem\\ParticleTests\\ParticleTestsContent\\particleEmitter3.xml", PARTICLE_LEVEL, 0.15));
-            EmitterList2.Add(new XNAEmitter(parent, new Vector2(350.0f, 250.0f), "D:\\workspace\\ParticleSystem\\ParticleTests\\ParticleTestsContent\\particleEmitter4.xml", PARTICLE_LEVEL, 0.15));
-            EmitterList3.Add(new XNAEmitter(parent, new Vector2(350.0f, 250.0f), "D:\\workspace\\ParticleSystem\\ParticleTests\\ParticleTestsContent\\squareEmitter.xml", PARTICLE_LEVEL, 1.0));
-            EmitterList3.Add(new XNAEmitter(parent, new Vector2(350.0f, 250.0f), "D:\\workspace\\ParticleSystem\\ParticleTests\\ParticleTestsContent\\squareEmitter.xml", PARTICLE_LEVEL, 1.0));
+            EmitterList1.Add(new XNAEmitter(parent, new Vector2(250.0f, 250.0f), XML_DIR + "particleEmitter2.xml", PARTICLE_LEVEL));
+            EmitterList1.Add(new XNAEmitter(parent, new Vector2(250.0f, 250.0f), XML_DIR + "particleEmitter1.xml", PARTICLE_LEVEL));
+            EmitterList2.Add(new XNAEmitter(parent, new Vector2(350.0f, 250.0f), XML_DIR + "particleEmitter3.xml", PARTICLE_LEVEL, 0.15));
+            EmitterList2.Add(new XNAEmitter(parent, new Vector2(350.0f, 250.0f), XML_DIR + "particleEmitter4.xml", PARTICLE_LEVEL, 0.15));
+            EmitterList3.Add(new XNAEmitter(parent, new Vector2(350.0f, 250.0f), XML_DIR + "squareEmitter.xml", PARTICLE_LEVEL, 1.0));
+            EmitterList3.Add(new XNAEmitter(parent, new Vector2(350.0f, 250.0f), XML_DIR + "squareEmitter.xml", PARTICLE_LEVEL, 1.0));
         }
 
         /// <summary>
@@ -70,19 +90,19 @@ namespace ParticleTests
             switch (num)
             {
                 case 1:
-                    
-                    EmitterList1.Add(new XNAEmitter(parent, location, "D:\\workspace\\ParticleSystem\\ParticleTests\\ParticleTestsContent\\particleEmitter2.xml", PARTICLE_LEVEL));
-                    EmitterList1.Add(new XNAEmitter(parent, location, "D:\\workspace\\ParticleSystem\\ParticleTests\\ParticleTestsContent\\particleEmitter1.xml", PARTICLE_LEVEL));
+
+                    EmitterList1.Add(new XNAEmitter(parent, location, XML_DIR + "particleEmitter2.xml", PARTICLE_LEVEL));
+                    EmitterList1.Add(new XNAEmitter(parent, location, XML_DIR + "particleEmitter1.xml", PARTICLE_LEVEL));
                     TriggerEffects(EmitterList1);
                     break;
                 case 2:
-                    EmitterList2.Add(new XNAEmitter(parent, location, "D:\\workspace\\ParticleSystem\\ParticleTests\\ParticleTestsContent\\particleEmitter3.xml", PARTICLE_LEVEL, 0.25));
-                    EmitterList2.Add(new XNAEmitter(parent, location, "D:\\workspace\\ParticleSystem\\ParticleTests\\ParticleTestsContent\\particleEmitter4.xml", PARTICLE_LEVEL, 0.25));
+                    EmitterList2.Add(new XNAEmitter(parent, location, XML_DIR + "particleEmitter3.xml", PARTICLE_LEVEL, 0.25));
+                    EmitterList2.Add(new XNAEmitter(parent, location, XML_DIR + "particleEmitter4.xml", PARTICLE_LEVEL, 0.25));
                     TriggerEffects(EmitterList2);
                     break;
                 case 3:
-                    EmitterList3.Add(new XNAEmitter(parent, location, "D:\\workspace\\ParticleSystem\\ParticleTests\\ParticleTestsContent\\squareEmitter.xml", PARTICLE_LEVEL, 1.0));
-                    EmitterList3.Add(new XNAEmitter(parent, location, "D:\\workspace\\ParticleSystem\\ParticleTests\\ParticleTestsContent\\squareEmitter.xml", PARTICLE_LEVEL, 1.0));
+                    EmitterList3.Add(new XNAEmitter(parent, location, XML_DIR + "squareEmitter.xml", PARTICLE_LEVEL, 1.0));
+                    EmitterList3.Add(new XNAEmitter(parent, location, XML_DIR + "squareEmitter.xml", PARTICLE_LEVEL, 1.0));
                     TriggerEffects(EmitterList3);
                     break;
             }

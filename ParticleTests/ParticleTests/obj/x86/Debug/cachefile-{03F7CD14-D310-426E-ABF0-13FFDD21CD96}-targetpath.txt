@@ -5,7 +5,9 @@ Content\smoke2.xnb
 Content\particle_base.xnb
 Content\TestSuite.xnb
 Content\square_particle.xnb
-Content\particleEmitter2.xml
-Content\particleEmitter3.xml
-Content\particleEmitter4.xml
-Content\squareEmitter.xml
+Content\XMLs\particleEmitter1.xml
+Content\XMLs\particleEmitter2.xml
+Content\XMLs\particleEmitter3.xml
+Content\XMLs\particleEmitter4.xml
+Content\XMLs\squareEmitter.xml
+Content\XMLs\Projectile1.xml
